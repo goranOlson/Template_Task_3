@@ -27,7 +27,7 @@ internal class Program
 
         bool running = true;
 
-       do
+        do
         {
             PrintMenu();
 
@@ -160,7 +160,18 @@ internal class Program
         // Lägg till minst 10 produkter i products-dictionaryn.
         // Välj egna koder, namn, priser och lagersaldon.
 
+        products["ANANAS"] = new Product("ANANAS", "Ananas", 1.00m, 100);
+        products["APELSIN"] = new Product("APELSIN", "Apelsin", 2.00m, 10);
+        products["BANAN"] = new Product("BANAN", "Banan", 3.00m, 100);
+        products["CLEMENTIN"] = new Product("CLEMENTIN", "Clementin", 4.95m, 10);
 
+        products["KOKOSNÖT"] = new Product("KOKOSNÖT", "Kokosnöt", 5.00m, 100);
+        products["MANDARIN"] = new Product("MANDARIN", "Mandarin", 6.00m, 10);
+        products["MANGO"] = new Product("MANGO", "Mango", 7.00m, 100);
+        products["MELON"] = new Product("MELON", "Melon", 8.00m, 10);
+
+        products["PÄRON"] = new Product("PÄRON", "Päron", 9.00m, 100);
+        products["PERSIKA"] = new Product("PERSIKA", "Persika", 10.00m, 10);
     }
 
     static void PrintProducts()
@@ -173,6 +184,26 @@ internal class Program
         // Räkna även ut totalt lagervärde.
         // Lagervärde för en produkt:
         // product.Price * product.Stock
+
+        // static Dictionary<string, Product> products = new Dictionary<string, Product>();
+
+        /*
+            Code = code;
+            Name = name;
+            Price = price;
+            Stock = stock;
+        */
+        foreach (var (key, p) in products)
+        {
+            // Console.WriteLine($"{key} - {p}");
+
+            
+            decimal stockValue = p.Price * p.Stock;
+
+            // Console.WriteLine($"{key} - {p} Lagervärde: {stockValue}");
+            // Console.WriteLine($"{key} - {p} Lagervärde: {stockValue}");
+            Console.WriteLine($"{p}. Lagervärde: {stockValue}");
+        }
 
 
         // Fråga:
