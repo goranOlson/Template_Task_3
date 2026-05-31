@@ -412,7 +412,7 @@ internal class Program
 
     static void AddCustomerToQueue()
     {
-        Console.WriteLine("TODO: Implementera AddCustomerToQueue.");
+        // Console.WriteLine("TODO: Implementera AddCustomerToQueue.");
 
         // TODO:
         // Läs in kundens namn (använd InputHelpers.ReadString).
@@ -421,30 +421,68 @@ internal class Program
         // Skriv ut att kunden lagts till och vilken plats i kön de har.
         // Lägg till ett loggmeddelande i logMessages.
 
+        Console.WriteLine($"Lägg till kund{Environment.NewLine}--------------{Environment.NewLine}");
+        string name = InputHelpers.ReadString("Ange namn: ");
+
+        Customer customer = new Customer(name);
+        customerQueue.Enqueue(customer);
+
+        // Hitta kundens position i kön
+        int pos = -1;
+        int counter = 0;
+        foreach (var c in customerQueue)
+        {
+            counter++;
+            if (c.Name == name)
+            {
+                pos = counter;
+            }
+        }
+
+        // Meddelanden - utskrift och log
+        string msg = $"La till kunden '{name}'";
+        Console.WriteLine($"{msg} på köplats: {pos} av {counter}{Environment.NewLine}");
+        logMessages.Add(msg);
+
         // Fråga:
         // Vad betyder FIFO?
-        Console.WriteLine("Svar: TODO - skriv ditt svar här");
+        Console.WriteLine("Svar: först i kön behandlas först. Nya ställer sig längst bak.");
     }
 
     static void ServeNextCustomer()
     {
-        Console.WriteLine("TODO: Implementera ServeNextCustomer.");
+        // Console.WriteLine("TODO: Implementera ServeNextCustomer.");
 
-        // TODO:
+        Console.WriteLine($"{Environment.NewLine}Betjäna näst kund{Environment.NewLine}-----------------{Environment.NewLine}");
+
         // Kontrollera om customerQueue är tom — skriv meddelande om den är det.
         // Om den inte är tom:
         // Använd Dequeue för att ta bort och hämta den första kunden.
         // Skriv ut vilken kund som blev betjänad.
         // Lägg till ett loggmeddelande i logMessages.
 
+        if (customerQueue.Count > 0)
+        {
+            Customer customer = customerQueue.Dequeue();
+            // Meddelande och log
+            string msg = "Betjänar nu kund: " + customer.Name;
+            Console.WriteLine(msg);
+            logMessages.Add(msg);
+        }
+        else
+        {
+            Console.WriteLine("Kön är tom!");
+        }
+        Console.WriteLine();  
+
         // Fråga:
         // Varför passar Queue bättre än Stack för en kundkö?
-        Console.WriteLine("Svar: TODO - skriv ditt svar här");
+        Console.WriteLine("Svar: Queue tar den först på tur medans Stack tar den sista på tur");
     }
 
     static void PrintCustomerQueue()
     {
-        Console.WriteLine("=== Kundkö ===");
+        Console.WriteLine($"=== Kundkö ===");
 
         // TODO:
         // Om customerQueue är tom, skriv att kön är tom.
@@ -458,7 +496,22 @@ internal class Program
         //
         // Tips: foreach fungerar på Queue utan att ta bort elementen.
 
-        Console.WriteLine("TODO: Implementera PrintCustomerQueue.");
+        if (customerQueue.Count > 0)
+        {
+            int count = 0;
+            foreach (var customer in customerQueue)
+            {
+                count++;
+                Console.WriteLine($"{count}. {customer}");
+            }
+        }
+        else
+        {
+            Console.WriteLine($"Kön är tom");
+        }
+        Console.WriteLine();
+
+        // Console.WriteLine("TODO: Implementera PrintCustomerQueue.");
     }
 
     #endregion
