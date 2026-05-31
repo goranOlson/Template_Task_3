@@ -473,7 +473,7 @@ internal class Program
         {
             Console.WriteLine("Kön är tom!");
         }
-        Console.WriteLine();  
+        Console.WriteLine();// Empty row
 
         // Fråga:
         // Varför passar Queue bättre än Stack för en kundkö?
@@ -509,7 +509,7 @@ internal class Program
         {
             Console.WriteLine($"Kön är tom");
         }
-        Console.WriteLine();
+        Console.WriteLine();// Empty row
 
         // Console.WriteLine("TODO: Implementera PrintCustomerQueue.");
     }
@@ -539,16 +539,46 @@ internal class Program
         // Bestäm om kunden ska tas bort från kön efter köp eller inte.
         // Motivera ditt val i kommentar.
 
-        Console.WriteLine("TODO: Implementera SellProduct.");
+        Console.WriteLine($"Sälj produkt{Environment.NewLine}------------{Environment.NewLine}");
+
+        if (customerQueue.Count > 0)
+        {
+            Customer customer = customerQueue.Peek();
+            Console.WriteLine($"Kund: {customer.Name}{Environment.NewLine}");
+
+            string productCode = InputHelpers.ReadString("Ange produktkod: ").ToUpper();
+
+            if (products.TryGetValue(productCode, out Product? product))
+            {
+                if (product.Stock > 0)
+                {
+                    product.Stock--;
+                    Sale sale = new Sale(productCode, product.Name, product.Price, customer.Name);
+                    Console.WriteLine($"{Environment.NewLine} " + sale.ToString());
+                    saleHistory.Push(sale);
+                    logMessages.Add(sale.ToString());
+                }
+            }
+            else
+            {
+                Console.WriteLine("Okänd produkt!");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Det finns ingen kund på kö!");
+        }
+        Console.WriteLine();// Empty row
 
         // Fråga:
         // Varför sparar vi försäljningar i en Stack?
-        Console.WriteLine("Svar: TODO - skriv ditt svar här");
+        Console.WriteLine("Svar: stacken är lämplig som ren lagring när saker bara ska växa");
     }
 
     static void UndoLastSale()
     {
-        Console.WriteLine("TODO: Implementera UndoLastSale.");
+        // Console.WriteLine("TODO: Implementera UndoLastSale.");
+        Console.WriteLine($"{Environment.NewLine}Ångra senaste försälningen{Environment.NewLine}------------------------------{Environment.NewLine}");
 
         // TODO:
         // Kontrollera om saleHistory är tom — skriv meddelande om den är det.
@@ -558,19 +588,56 @@ internal class Program
         // Öka produktens Stock med 1.
         // Logga vad som ångrades i logMessages.
 
+        if (saleHistory.Count > 0)
+        {
+            Sale sale = saleHistory.Pop();
+            if(products.TryGetValue(sale.ProductCode, out Product? product))
+            {
+                product.Stock++;
+                string msg = "Ångrade försäljning: " + sale.ToString();
+                Console.WriteLine(msg);
+                logMessages.Add(msg);
+            }
+            else
+            {
+                Console.WriteLine("Hittade ingen produkt med kod: " + sale.ProductCode);
+            }
+        }
+        else
+        {
+            Console.WriteLine("saleHistory är tom");
+        }
+
         // Fråga:
         // Vad betyder LIFO?
-        Console.WriteLine("Svar: TODO - skriv ditt svar här");
+        Console.WriteLine("Svar: LIFO (last in - first out) den sista blir den första ut");
     }
 
     static void ReverseTextLab()
     {
         Console.WriteLine("=== Stack-labb: vänd text ===");
-        Console.WriteLine("TODO: Implementera ReverseTextLab.");
+        // Console.WriteLine("TODO: Implementera ReverseTextLab.");
 
         // TODO:
         // Läs in en text från användaren.
         // Skriv ut texten bakofram använd en lämplig collektion.
+        
+        string input = InputHelpers.ReadString("Skriv en text så som ska vändas: ");
+
+        Stack<char> stack = new Stack<char>();
+        foreach (char c in input)
+        {
+            // Console.Write(c + " ");
+            stack.Push(c);
+        }
+        Console.WriteLine();
+
+        Console.WriteLine("Vänd text blir:");
+        foreach(char c in stack)
+        {
+            Console.Write(c);
+        }
+        Console.WriteLine();
     }
 
     #endregion
@@ -589,7 +656,18 @@ internal class Program
         // Om logMessages är tom, skriv "Inga loggmeddelanden finns."
         // Annars: loopa igenom logMessages och skriv ut varje meddelande.
 
-        Console.WriteLine("TODO: Implementera PrintLog.");
+        if (logMessages.Count > 0)
+        {
+            foreach (string item in logMessages)
+            {
+                Console.WriteLine(item);
+            }
+        }
+        else
+        {
+            Console.WriteLine("Inga loggmeddelanden finns.");
+        }
+        Console.WriteLine();// Empty row
 
         // Fråga:
         // Varför passar List bra för loggmeddelanden?
@@ -625,22 +703,34 @@ internal class Program
         // TODO:
         // Lägg till minst 4 egna varor med en loop.
         // Skriv ut hela listan.
+        shoppingList.Add("Apelsin");
+        shoppingList.Add("Banan");
+        shoppingList.Add("Clementin");
+        shoppingList.Add("Druva");
+        // shoppingList.Add("Äpple");  // Test
+
+        foreach (string item in shoppingList)
+        {
+            Console.WriteLine(item);
+        }
+        PrintListInfo(shoppingList, "Efter Druva");
+
 
         // Fråga 1:
         // Vad betyder Count?
-        Console.WriteLine("Svar 1: TODO - skriv ditt svar här");
+        Console.WriteLine("Svar 1: Count är antalet element i listan");
 
         // Fråga 2:
         // Vad betyder Capacity?
-        Console.WriteLine("Svar 2: TODO - skriv ditt svar här");
+        Console.WriteLine("Svar 2: Capacity är antal element listan kan hålla utan att behöva utökas");
 
         // Fråga 3:
         // Varför ökar inte Capacity med exakt 1 varje gång?
-        Console.WriteLine("Svar 3: TODO - skriv ditt svar här");
+        Console.WriteLine("Svar 3: Capacity verkar byggas på med block om plats för visst antal element");
 
         // Fråga 4:
         // Minskar Capacity automatiskt när element tas bort?
-        Console.WriteLine("Svar 4: TODO - skriv ditt svar här");
+        Console.WriteLine("Svar 4: TODO - Capacity verkar inte minska när innehållet minskar");
     }
 
     static void PrintListInfo(List<string> list, string message)
@@ -665,23 +755,34 @@ internal class Program
         // TODO:
         // Skriv ut alla veckodagar med en for-loop.
         // Tips: använd weekdays.Length för att veta hur många element det finns.
+        Console.WriteLine("For: ");
+        for (int i = 0; i < weekdays.Length; i++)
+        {
+            Console.WriteLine(weekdays[i]);
+        }
+        Console.WriteLine();
 
         // TODO:
         // Skriv ut alla veckodagar med foreach.
-
-        Console.WriteLine("TODO: Implementera utskrifter i ArrayLab.");
+        // Console.WriteLine("TODO: Implementera utskrifter i ArrayLab.");
+        Console.WriteLine("Foreach: ");
+        foreach (var day in weekdays)
+        {
+            Console.WriteLine(day);
+        }
+        Console.WriteLine();
 
         // Fråga 1:
         // När passar en array bättre än en List?
-        Console.WriteLine("Svar 1: TODO - skriv ditt svar här");
+        Console.WriteLine("Svar 1: Array är vara bättre än List när man ska lagra ett på förhand antal element");
 
         // Fråga 2:
         // Vad händer om du försöker skriva weekdays[5]?
-        Console.WriteLine("Svar 2: TODO - skriv ditt svar här");
-
+        Console.WriteLine("Svar 2: Vi får ett IndexOutOfRangeException-fel");
+        
         // Fråga 3:
         // Varför måste arrayens storlek anges från början?
-        Console.WriteLine("Svar 3: TODO - skriv ditt svar här");
+        Console.WriteLine("Svar 3: Minne motsvarande arrayens längd reservers när den skapas. Det kan inte ändras senare.");
     }
 
     #endregion
