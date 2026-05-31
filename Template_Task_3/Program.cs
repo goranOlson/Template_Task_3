@@ -1,6 +1,8 @@
-﻿using Template_Task_3.DemoClasses;
+﻿using System.Runtime.CompilerServices;
+using Template_Task_3.DemoClasses;
 using Template_Task_3.Helpers;
 using Template_Task_3.StackAndHeap;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Template_Task_3;
 
@@ -22,7 +24,6 @@ internal class Program
 
     static void Main(string[] args)
     {
-        //ToDo implementera 
         SeedProducts();
 
         bool running = true;
@@ -129,7 +130,7 @@ internal class Program
             Console.ReadKey();
             Console.Clear();
         }
-        while(running);
+        while (running);
     }
 
     static void PrintMenu()
@@ -151,25 +152,35 @@ internal class Program
     // DEL 1 - PRODUKTER OCH DICTIONARY
     // ============================================================
 
+    public static int ReturnValue()
+    {
+        // int x = new int();
+        int x = 3;
+        int y = new int();
+        y = x;
+        y = 4;
+        return x;
+    }
+
     static void SeedProducts()
     {
+        var test = ReturnValue();
+        Console.WriteLine("test: " + test);
+
         // Exempel på hur du lägger till en produkt i dictionaryn:
         // products["KAFFE"] = new Product("KAFFE", "Kaffe", 15.00m, 50);
         //
-        // TODO:
         // Lägg till minst 10 produkter i products-dictionaryn.
         // Välj egna koder, namn, priser och lagersaldon.
 
         products["ANANAS"] = new Product("ANANAS", "Ananas", 1.00m, 100);
         products["APELSIN"] = new Product("APELSIN", "Apelsin", 2.00m, 10);
         products["BANAN"] = new Product("BANAN", "Banan", 3.00m, 100);
-        products["CLEMENTIN"] = new Product("CLEMENTIN", "Clementin", 4.95m, 10);
-
+        products["CLEMENTIN"] = new Product("CLEMENTIN", "Clementin", 4.00m, 10);
         products["KOKOSNÖT"] = new Product("KOKOSNÖT", "Kokosnöt", 5.00m, 100);
         products["MANDARIN"] = new Product("MANDARIN", "Mandarin", 6.00m, 10);
         products["MANGO"] = new Product("MANGO", "Mango", 7.00m, 100);
         products["MELON"] = new Product("MELON", "Melon", 8.00m, 10);
-
         products["PÄRON"] = new Product("PÄRON", "Päron", 9.00m, 100);
         products["PERSIKA"] = new Product("PERSIKA", "Persika", 10.00m, 10);
     }
@@ -185,36 +196,22 @@ internal class Program
         // Lagervärde för en produkt:
         // product.Price * product.Stock
 
-        // static Dictionary<string, Product> products = new Dictionary<string, Product>();
-
-        /*
-            Code = code;
-            Name = name;
-            Price = price;
-            Stock = stock;
-        */
-        foreach (var (key, p) in products)
+        // TODO - static Dictionary<string, Product> products = new Dictionary<string, Product>();
+        foreach (var (key, product) in products)
         {
-            // Console.WriteLine($"{key} - {p}");
-
-            
-            decimal stockValue = p.Price * p.Stock;
-
-            // Console.WriteLine($"{key} - {p} Lagervärde: {stockValue}");
-            // Console.WriteLine($"{key} - {p} Lagervärde: {stockValue}");
-            Console.WriteLine($"{p}. Lagervärde: {stockValue}");
+            decimal stockValue = product.Price * product.Stock;
+            Console.WriteLine($"{product}. Lagervärde: {stockValue}");
         }
-
 
         // Fråga:
         // Varför passar Dictionary bra för ett produktregister?
-        Console.WriteLine("Svar: TODO - skriv ditt svar här");
+        Console.WriteLine($"{Environment.NewLine}Svar: med Dictionary kan man slå upp en produkt i ett register via dess nyckel (index/key).");
     }
 
     static void FindProduct()
     {
         Console.Write("Ange produktkod: ");
-        
+
 
         // TODO:
         // Hämta produktens code
@@ -223,17 +220,40 @@ internal class Program
         // Om produkten finns, skriv ut den.
         // Om produkten saknas, skriv ett felmeddelande.
 
-        Console.WriteLine("TODO: Implementera FindProduct.");
+        string input;
+        string searchKey;
+
+        Console.Write("Ange produktnamn: ");
+        input = Console.ReadLine() ?? "";
+
+        Console.WriteLine();// All output uses this (empty) carriage return 
+
+        if (!string.IsNullOrWhiteSpace(input))
+        {
+            searchKey = input.ToUpper();
+            if (products.TryGetValue(searchKey, out Product? product))
+            {
+                Console.WriteLine(product);
+            }
+            else
+            {
+                Console.WriteLine($"Hittade inte produkten '{input}'!");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Felaktig indata!");
+        }
 
         // Fråga:
         // Varför är TryGetValue bättre än att skriva products[code] direkt?
-        Console.WriteLine("Svar: TODO - skriv ditt svar här");
+        Console.WriteLine($"{Environment.NewLine}Svar: användning av TryGetValue gör att programmet inte kraschar om index inte finns");
     }
 
     static void AddProduct()
     {
         Console.WriteLine("TODO: Implementera AddProduct.");
-      
+
         // TODO:
         // Läs in produktkod.
         // Gör produktkoden till stora bokstäver med .ToUpper().
@@ -245,14 +265,51 @@ internal class Program
         // Lägg till produkten i products-dictionaryn.
         // Lägg till ett loggmeddelande i logMessages.
 
-        // Fråga:
+        string input = "";
+        string productKey;
+        bool goodKey = false;
+
+        Console.WriteLine($"Skapa produkt{Environment.NewLine}------------");
+
+        // Ask for unique product key
+        do
+        {
+            Console.Write($"{Environment.NewLine}Ange produktkod: ");
+            input = Console.ReadLine() ?? "";
+
+            if (!string.IsNullOrWhiteSpace(input))
+            {
+                productKey = input.ToUpper();
+                if (!products.TryGetValue(productKey, out Product? product))
+                {
+                    goodKey = true;
+                }
+                else
+                {
+                    Console.WriteLine("Produktnamnet används redan, pröva med ett annat!");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Felaktig indata!");
+            }
+        } while (!goodKey);
+
+        // if
+        // Console.WriteLine($"{Environment.NewLine}After...");
+
+        // Läs in namn.
+        // Läs in pris (använd InputHelpers.ReadDecimal).
+        // Läs in lagersaldo (använd InputHelpers.ReadInt).
+        // Skapa ett Product-objekt.
+
+        // Fråga: TODO
         // Vad är nyckeln och vad är värdet i products?
-        Console.WriteLine("Svar: TODO - skriv ditt svar här");
+        Console.WriteLine($"{Environment.NewLine}Svar: TODO - skriv ditt svar här");
     }
 
     static void ChangeStock()
     {
-        Console.WriteLine("TODO: Implementera ChangeStock.");
         // TODO:
         // Läs in produktkod.
         // Slå upp produkten med TryGetValue.
@@ -262,6 +319,28 @@ internal class Program
         // 
         // Logga ändringen.
 
+        Console.WriteLine($"Ändra en produkts lagersaldo{Environment.NewLine}---------------------------");
+
+        string inputKey = InputHelpers.ReadString($"{Environment.NewLine}Ange produktkod: ");
+        string productKey = inputKey.ToUpper();
+        if (products.TryGetValue(productKey, out Product? product))
+        {
+            Console.WriteLine($"{Environment.NewLine}Produktdata: {product}{Environment.NewLine}");
+            int newStock = InputHelpers.ReadInt("Ange nytt lagersaldo: ");
+            if (newStock >= 0)
+            {
+                product.Stock = newStock;
+                Console.WriteLine($"{Environment.NewLine}Nytt lagersaldo: " + newStock);
+            }
+            else
+            {
+                Console.WriteLine("Lagersaldo kan inte vara negativt!");
+            }
+        }
+        else
+        {
+            Console.WriteLine($"Hittade inte produkten med kod: '{inputKey}'");
+        }
     }
 
     static decimal GetPriceBad(string code)
@@ -296,14 +375,31 @@ internal class Program
         // Använd TryGetValue för att slå upp priset.
         // Returnera priset om koden finns, annars -1.
         //
+
+        Dictionary<string, decimal> prices = new Dictionary<string, decimal>();
+        prices["KAF"] = 15;
+        prices["TE"] = 12;
+        prices["BUL"] = 18;
+        prices["MCK"] = 35;
+
+        decimal price = -1;
+        if (!string.IsNullOrWhiteSpace(code))
+        {
+            string toUpper = code.ToUpper();
+            if (prices.TryGetValue(toUpper, out decimal value))
+            {
+                price = value;
+            }
+        }
+
         // Jämför sedan de två metoderna — vad händer om du behöver lägga till
         // en femte produkt? Vilken metod är enklare att utöka?
 
         // Fråga:
         // Varför är Dictionary-lösningen bättre än många if/else-satser?
-        Console.WriteLine("Svar: TODO - skriv ditt svar här");
+        Console.WriteLine($"{Environment.NewLine}Svar: det är lättare att ändra lösningar med Dictionare än if-else-lösningar.");
 
-        return -1;
+        return price;
     }
 
     #endregion
@@ -317,7 +413,7 @@ internal class Program
     static void AddCustomerToQueue()
     {
         Console.WriteLine("TODO: Implementera AddCustomerToQueue.");
-        
+
         // TODO:
         // Läs in kundens namn (använd InputHelpers.ReadString).
         // Skapa ett Customer-objekt med namnet.
@@ -333,7 +429,7 @@ internal class Program
     static void ServeNextCustomer()
     {
         Console.WriteLine("TODO: Implementera ServeNextCustomer.");
-        
+
         // TODO:
         // Kontrollera om customerQueue är tom — skriv meddelande om den är det.
         // Om den inte är tom:
@@ -619,7 +715,7 @@ internal class Program
             Console.WriteLine("Strängen är INTE välformad.");
         }
 
-        
+
     }
 
     static bool CheckParentheses(string text)
