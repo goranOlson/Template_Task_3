@@ -797,13 +797,13 @@ internal class Program
     {
         Console.WriteLine("=== Dictionary-labb: räkna ord ===");
 
-        Console.WriteLine("Skriv en mening:");
+        Console.WriteLine($"{Environment.NewLine}Skriv en mening:");
         string text = ReadLine;
 
         //ToDo: Skriv koden för CountWords
         Dictionary<string, int> wordCounts = CountWords(text);
 
-        Console.WriteLine("Resultat:");
+        Console.WriteLine($"{Environment.NewLine}Resultat:");
 
         foreach (KeyValuePair<string, int> pair in wordCounts)
         {
@@ -812,7 +812,7 @@ internal class Program
 
         // Fråga:
         // Varför passar Dictionary bra när vi ska räkna ord?
-        Console.WriteLine("Svar: TODO - skriv ditt svar här");
+        Console.WriteLine("Svar: TODO - man kan enkelt hålla koll på unika data eftersom nyckeln är unik");
     }
 
     static Dictionary<string, int> CountWords(string text)
@@ -830,9 +830,26 @@ internal class Program
         // Om ordet redan finns i wordCounts → öka värdet med 1.
         // Annars → lägg till ordet med värdet 1.
 
+        string[] words = text.Split(new char[] { ' ', '.', '!', '?', ':', ';' },
+                                           StringSplitOptions.RemoveEmptyEntries);
+
+        foreach (var item in words)
+        {
+            string lower = item.ToLower();
+
+            if (wordCounts.ContainsKey(lower))
+            {
+                wordCounts[lower]++;
+            }
+            else
+            {
+                wordCounts.Add(lower, 1);
+            }
+        }
+
         // Fråga:
         // Vad är nyckeln och vad är värdet i wordCounts?
-        Console.WriteLine("Svar: TODO - skriv ditt svar här");
+        Console.WriteLine("Svar: nyckeln är dictionaryns index, värdet är själva datan som lagras");
 
         return wordCounts;
     }
@@ -884,12 +901,52 @@ internal class Program
         // Tips Stack:
         // Stacken håller reda på vilka öppnare du sett men ännu inte stängt.
         // Tänk på vad LIFO innebär här — varför är det precis rätt egenskap för det här problemet?
-        //
+
+        bool error = false;
+
+        Dictionary<char, char> tokens = new Dictionary<char, char>();
+        tokens.Add('(', ')');
+        tokens.Add('[', ']');
+        tokens.Add('{', '}');
+
+        Stack<char> stack = new Stack<char>();
+        
+        // Check token balance
+        for (int i = 0; i < text.Length; i++)
+        {
+            char tkn = text[i];
+
+            if (tokens.ContainsKey(tkn))
+            {
+                stack.Push(tkn);
+            }
+            else if (stack.Count > 0 && tokens.ContainsValue(tkn) && tokens.ContainsKey(stack.Peek()))
+            {
+                stack.Pop();
+            }
+            else
+            {
+                // Bad token or tokens not in balance
+                error = true;
+                break;
+            }
+        }
+
+        // Check that stack is empty now
+        if (stack.Count > 0)
+        {
+            foreach (var item in stack)
+            {
+                Console.WriteLine(" " + item);
+            }
+            error = true;
+        }
+
         // Fråga:
         // Varför är Dictionary + Stack bättre än bara Stack med if/else för matchningen?
-        Console.WriteLine("Svar: TODO - skriv ditt svar här");
+        Console.WriteLine("Svar: enkelt att ändra om man vill bygga ut");
 
-        return false;
+        return !error;
     }
 
     // ============================================================
