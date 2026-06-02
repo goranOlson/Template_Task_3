@@ -252,8 +252,6 @@ internal class Program
 
     static void AddProduct()
     {
-        Console.WriteLine("TODO: Implementera AddProduct.");
-
         // TODO:
         // Läs in produktkod.
         // Gör produktkoden till stora bokstäver med .ToUpper().
@@ -295,9 +293,6 @@ internal class Program
             }
         } while (!goodKey);
 
-        // if
-        // Console.WriteLine($"{Environment.NewLine}After...");
-
         // Läs in namn.
         // Läs in pris (använd InputHelpers.ReadDecimal).
         // Läs in lagersaldo (använd InputHelpers.ReadInt).
@@ -305,7 +300,7 @@ internal class Program
 
         // Fråga: TODO
         // Vad är nyckeln och vad är värdet i products?
-        Console.WriteLine($"{Environment.NewLine}Svar: TODO - skriv ditt svar här");
+        Console.WriteLine($"{Environment.NewLine}Svar: nyckeln är index (produktkoden), värdet är själva datan (produkten)");
     }
 
     static void ChangeStock()
@@ -374,7 +369,6 @@ internal class Program
         // Samma fyra produkter och priser som i GetPriceBad ska finnas.
         // Använd TryGetValue för att slå upp priset.
         // Returnera priset om koden finns, annars -1.
-        //
 
         Dictionary<string, decimal> prices = new Dictionary<string, decimal>();
         prices["KAF"] = 15;
@@ -412,8 +406,6 @@ internal class Program
 
     static void AddCustomerToQueue()
     {
-        // Console.WriteLine("TODO: Implementera AddCustomerToQueue.");
-
         // TODO:
         // Läs in kundens namn (använd InputHelpers.ReadString).
         // Skapa ett Customer-objekt med namnet.
@@ -436,6 +428,7 @@ internal class Program
             if (c.Name == name)
             {
                 pos = counter;
+                break;
             }
         }
 
@@ -451,8 +444,6 @@ internal class Program
 
     static void ServeNextCustomer()
     {
-        // Console.WriteLine("TODO: Implementera ServeNextCustomer.");
-
         Console.WriteLine($"{Environment.NewLine}Betjäna näst kund{Environment.NewLine}-----------------{Environment.NewLine}");
 
         // Kontrollera om customerQueue är tom — skriv meddelande om den är det.
@@ -477,12 +468,12 @@ internal class Program
 
         // Fråga:
         // Varför passar Queue bättre än Stack för en kundkö?
-        Console.WriteLine("Svar: Queue tar den först på tur medans Stack tar den sista på tur");
+        Console.WriteLine("Svar: Queue tar den först i kön medans Stack tar den sista i kön");
     }
 
     static void PrintCustomerQueue()
     {
-        Console.WriteLine($"=== Kundkö ===");
+        Console.WriteLine("=== Kundkö ===");
 
         // TODO:
         // Om customerQueue är tom, skriv att kön är tom.
@@ -510,8 +501,6 @@ internal class Program
             Console.WriteLine($"Kön är tom");
         }
         Console.WriteLine();// Empty row
-
-        // Console.WriteLine("TODO: Implementera PrintCustomerQueue.");
     }
 
     #endregion
@@ -572,12 +561,11 @@ internal class Program
 
         // Fråga:
         // Varför sparar vi försäljningar i en Stack?
-        Console.WriteLine("Svar: stacken är lämplig som ren lagring när saker bara ska växa");
+        Console.WriteLine("Svar: man vill kanske kunna ångra senaste försäljningen...?");
     }
 
     static void UndoLastSale()
     {
-        // Console.WriteLine("TODO: Implementera UndoLastSale.");
         Console.WriteLine($"{Environment.NewLine}Ångra senaste försälningen{Environment.NewLine}------------------------------{Environment.NewLine}");
 
         // TODO:
@@ -610,7 +598,7 @@ internal class Program
 
         // Fråga:
         // Vad betyder LIFO?
-        Console.WriteLine("Svar: LIFO (last in - first out) den sista blir den första ut");
+        Console.WriteLine("Svar: LIFO (last in - first out) den sista in blir den första ut");
     }
 
     static void ReverseTextLab()
@@ -627,12 +615,10 @@ internal class Program
         Stack<char> stack = new Stack<char>();
         foreach (char c in input)
         {
-            // Console.Write(c + " ");
             stack.Push(c);
         }
-        Console.WriteLine();
 
-        Console.WriteLine("Vänd text blir:");
+        Console.WriteLine($"{Environment.NewLine}Vänd text blir:");
         foreach(char c in stack)
         {
             Console.Write(c);
@@ -671,7 +657,7 @@ internal class Program
 
         // Fråga:
         // Varför passar List bra för loggmeddelanden?
-        Console.WriteLine("Svar: TODO - skriv ditt svar här");
+        Console.WriteLine("Svar: den ändrar storlek beroende på antal poster");
     }
 
     static void ListLab()
@@ -726,7 +712,7 @@ internal class Program
 
         // Fråga 3:
         // Varför ökar inte Capacity med exakt 1 varje gång?
-        Console.WriteLine("Svar 3: Capacity verkar byggas på med block om plats för visst antal element");
+        Console.WriteLine("Svar 3: Capacity byggs på med block om plats för visst antal element");
 
         // Fråga 4:
         // Minskar Capacity automatiskt när element tas bort?
@@ -774,11 +760,11 @@ internal class Program
 
         // Fråga 1:
         // När passar en array bättre än en List?
-        Console.WriteLine("Svar 1: Array är vara bättre än List när man ska lagra ett på förhand antal element");
+        Console.WriteLine("Svar 1: Array är vara bättre än List när man ska lagra ett på förhand känt antal element");
 
         // Fråga 2:
         // Vad händer om du försöker skriva weekdays[5]?
-        Console.WriteLine("Svar 2: Vi får ett IndexOutOfRangeException-fel");
+        Console.WriteLine("Svar 2: Vi får ett IndexOutOfRangeException");
         
         // Fråga 3:
         // Varför måste arrayens storlek anges från början?
@@ -833,17 +819,17 @@ internal class Program
         string[] words = text.Split(new char[] { ' ', '.', '!', '?', ':', ';' },
                                            StringSplitOptions.RemoveEmptyEntries);
 
-        foreach (var item in words)
+        foreach (var word in words)
         {
-            string lower = item.ToLower();
+            string lowerWord = word.ToLower();
 
-            if (wordCounts.ContainsKey(lower))
+            if (wordCounts.ContainsKey(lowerWord))
             {
-                wordCounts[lower]++;
+                wordCounts[lowerWord]++;
             }
             else
             {
-                wordCounts.Add(lower, 1);
+                wordCounts.Add(lowerWord, 1);
             }
         }
 
@@ -885,8 +871,6 @@ internal class Program
         {
             Console.WriteLine("Strängen är INTE välformad.");
         }
-
-
     }
 
     static bool CheckParentheses(string text)
@@ -918,16 +902,40 @@ internal class Program
 
             if (tokens.ContainsKey(tkn))
             {
+                // Valid key - push to stack
                 stack.Push(tkn);
             }
-            else if (stack.Count > 0 && tokens.ContainsValue(tkn) && tokens.ContainsKey(stack.Peek()))
+            else if (tokens.ContainsValue(tkn))
             {
-                stack.Pop();
+                // Valid value - try to pop from stack
+                if (stack.Count > 0)
+                {
+                    // Check that token has the right key on stack
+                    if (tokens.TryGetValue(stack.Peek(), out char value))
+                    {
+                        if (tkn == value)
+                        {
+                            stack.Pop();
+                        }
+                        else
+                        {
+                            error = true;
+                        }
+                    }
+                    else
+                    {
+                        error = true;
+                    }
+                }
+                else
+                {
+                    // Can't pop - stack is empty
+                    error = true;
+                }
             }
-            else
+
+            if (error)
             {
-                // Bad token or tokens not in balance
-                error = true;
                 break;
             }
         }
@@ -935,10 +943,6 @@ internal class Program
         // Check that stack is empty now
         if (stack.Count > 0)
         {
-            foreach (var item in stack)
-            {
-                Console.WriteLine(" " + item);
-            }
             error = true;
         }
 
@@ -1000,32 +1004,34 @@ internal class Program
 
         // Fråga 1:
         // Varför ändras inte number1 när number2 ändras?
-        Console.WriteLine("Svar 1: TODO - skriv ditt svar här");
+        Console.WriteLine("Svar 1: number1/number2 är av typen valueType och måste ändras individuellt");
 
         // Fråga 2:
         // Varför ändras inte score1.Points när score2.Points ändras?
-        Console.WriteLine("Svar 2: TODO - skriv ditt svar här");
+        Console.WriteLine("Svar 2: ScoreValue är en struct vilket är en valueType");
 
         // Fråga 3:
         // Varför ändras product1.Stock när product2.Stock ändras?
-        Console.WriteLine("Svar 3: TODO - skriv ditt svar här");
+        Console.WriteLine("Svar 3: Product är ett object och både product1 och product2 refererar till samma objekt.");
 
         // Fråga 4:
         // Är Product en value type eller reference type?
-        Console.WriteLine("Svar 4: TODO - skriv ditt svar här");
+        Console.WriteLine("Svar 4: Product är en reference type");
 
         // Fråga 5:
         // Vad ligger på heapen i Product-exemplet?
-        Console.WriteLine("Svar 5: TODO - skriv ditt svar här");
+        Console.WriteLine("Svar 5: objektet som product1 och product2 pekar på ligger på heapen.");
 
         // Fråga 6:
         // Vad innebär det att två variabler kan peka på samma objekt?
-        Console.WriteLine("Svar 6: TODO - skriv ditt svar här");
+        Console.WriteLine("Svar 6: man riskerar oavsiktlig påverkan av objekt");
 
         // Fråga 7:
         // Vad är skillnaden mellan stacken i minnet och Stack<T> som datastruktur?
         Console.WriteLine("Svar 7: TODO - skriv ditt svar här");
     }
+
+
 
     #endregion
 
